@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var ob = {
+            n: {
+                i1: "an1",
+                i2: "an2"
+            },
+            m: {
+                i1: "am1",
+                i2: {
+                    k: {
+                        d: "s",
+                        f: {
+                            f: 1,
+                            k: 2
+                        }
+                    },
+                    h: "am2hh"
+                }
+            }
+        }
+        const isEmptyObject = obj => {
+            for (const prop in obj) {
+                if (obj.hasOwnProperty(prop)) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        const _search = (ob, match) => {
+            if(typeof ob !== 'object' || !Array.isArray(match))
+            {
+                console.log(ob, Array.isArray(match))
+                return;
+            }
+            if(match.length === 1)
+            {
+                let treeNew = {}
+                for(let key in ob)
+                {
+                    if(match[0] == key) continue
+                        treeNew[key] = ob[key]
+                    // delete ob[key]
+                }
+                ob = treeNew
+                console.log(ob, treeNew)
+                return;
+            }
+            else if(match.length > 1)
+            {
+                //remove from root node
+                const key = match[0]
+                if(!ob.hasOwnProperty(key)) return;
+                match = match.filter(item => { return item !== key})
+                
+                _search(ob[key], match)
+
+                //use below logic for remove from any node
+                // for(var i = 0; i < match.length; ++i)
+                // {
+                //     for(let key in ob)
+                //     {
+                //         if(match[i] === key)
+                //         {
+                //             match = match.filter(item => { return item !== key})
+                //             ob = ob[key]
+                //             _search(ob, match)
+                //         }
+                //     }
+                // }
+            }
+        }
+        let a = {obo: ob}
+        const result = _search(a.obo, ["m", "i2", "k", "f"])
+        // if(a.obo.hasOwnProperty("m"))
+            console.log(a.obo)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+services:
+  server:
+    build: .
+    volumes:
+      - type: volume
+        source: sever_data
+        target: /data
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./volumes
+        target: /sever_data/data
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - ebm
+    links:
+      - mongodb
+      - redis
+
+  mongodb:
+    image: mongo
+    volumes:
+      - type: volume
+        source: mongodb_data
+        target: /data/db
+      - type: bind
+        source: ./volumes
+        target: /mongodb_data/data/db
+    ports:
+      - "27018:27017"
+    networks:
+      - ebm
+
+  redis:
+    image: redis
+    volumes:
+      - type: volume
+        source: redis_data
+        target: /data
+      - type: bind
+        source: ./volumes
+        target: /redis_data/data
+    ports:
+      - "6379:6379"
+    networks:
+      - ebm    
+
+networks:
+  ebm:
+    driver: bridge
+volumes:
+  sever_data:
+  mongodb_data:
+    # external: true
+  redis_data:
+  
